@@ -21,6 +21,15 @@ And clica em "Cadastrar"
 Then o sistema reconhece a ausencia de informações
 And uma mensagem de erro "Cadastro não realizado. Todos os campos devem ser preenchidos!" é exibida.
 
+Scenario: Cadastro de sala mal sucedido por capacidade negativa
+Given o administrador "Pedro Dias" 
+And ele está na página de cadastro de salas
+When ele preenche o campo "Capacidade" com "-10"
+And ele preenche os outros campos do formulário
+And clica em "Cadastrar"
+Then o sistema reconhece que a capacidade é um valor inválido
+And uma mensagem de erro "Cadastro não realizado. A capacidade deve ser um número positivo!" é exibida.
+
 Scenario: Cadastro de sala mal sucedido por ela já estar cadastrada
 Given o administrador "Pedro Dias" 
 And ele está na página de cadastro de salas

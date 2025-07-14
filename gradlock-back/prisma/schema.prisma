@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "../generated/prisma"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+// Modelo de Usuário (Discentes, Docentes e Administradores)
+model User {
+    id         Int      @id @default(autoincrement())
+    cpf        String   @unique
+    name       String
+    password   String
+    userType   UserType
+    course     String?  // Apenas para discentes
+    enrollment String?  @unique // Apenas para discentes
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    // Relacionamentos
+    reservations Reservation[]
+
+    @@map("users")
+}
+
+// Modelo de Sala
+model Room {
+    id           Int      @id @default(autoincrement())
+    name         String   @unique
+    description  String
+    capacity     Int
+    hasComputers Boolean  @default(false)
+    hasProjector Boolean  @default(false)
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    // Relacionamentos
+    reservations Reservation[]
+
+    @@map("rooms")
+}
+
+// Modelo de Reserva
+model Reservation {
+    id        Int               @id @default(autoincrement())
+    userId    Int
+    roomId    Int
+    date      DateTime
+    startTime String
+    endTime   String
+    status    ReservationStatus @default(PENDING)
+    reason    String?           // Motivo da solicitação
+    createdAt DateTime          @default(now())
+    updatedAt DateTime          @updatedAt
+
+    // Relacionamentos
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+    // Índices compostos para evitar conflitos de horário
+    @@unique([roomId, date, startTime])
+    @@map("reservations")
+}
+
+// Enums
+enum UserType {
+    STUDENT // Discente
+    TEACHER // Docente
+    ADMIN   // Administrador
+
+    @@map("user_type")
+}
+
+enum ReservationStatus {
+    PENDING  // Pendente
+    APPROVED // Confirmada
+    REJECTED // Negada
+
+    @@map("reservation_status")
+}
