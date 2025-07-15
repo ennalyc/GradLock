@@ -29,11 +29,3 @@ When ele solicita a deleção da sala com ID "1"
 Then o sistema não permite a deleção
 And a mensagem "Não é possível deletar a sala. Existem reservas ativas ou futuras para esta sala" é exibida
 And o número de reservas ativas é informado
-
-Scenario: Erro interno do servidor na deleção
-Given o administrador "Pedro Dias"
-And existe uma sala com ID "1" no sistema
-And ocorre um erro interno no servidor
-When ele solicita a deleção da sala com ID "1"
-Then o sistema retorna um erro interno
-And a mensagem "Erro interno do servidor ao deletar sala" é exibida

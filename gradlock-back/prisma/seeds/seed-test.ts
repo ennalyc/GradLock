@@ -5,10 +5,10 @@ const prisma = new PrismaClient();
 async function main() {
   // Criar administrador padrão
   const admin = await prisma.user.upsert({
-    where: { cpf: '123.456.789-00' },
+    where: { cpf: '12345678900' },
     update: {},
     create: {
-      cpf: '123.456.789-00',
+      cpf: '12345678900',
       name: 'Administrador do Sistema',
       password: 'admin123', // Em produção, isso deve ser hasheado
       userType: UserType.ADMIN,
@@ -17,10 +17,10 @@ async function main() {
 
   // Criar alguns professores
   const professor1 = await prisma.user.upsert({
-    where: { cpf: '234.567.890-12' },
+    where: { cpf: '23456789012' },
     update: {},
     create: {
-      cpf: '234.567.890-12',
+      cpf: '23456789012',
       name: 'Breno Miranda da Silva',
       password: '310590',
       userType: UserType.TEACHER,
@@ -29,10 +29,10 @@ async function main() {
 
   // Criar alguns alunos
   const aluno1 = await prisma.user.upsert({
-    where: { cpf: '345.678.901-23' },
+    where: { cpf: '34567890123' },
     update: {},
     create: {
-      cpf: '345.678.901-23',
+      cpf: '34567890123',
       name: 'Maria Fernanda dos Santos',
       password: '041102',
       userType: UserType.STUDENT,
@@ -42,7 +42,7 @@ async function main() {
   });
 
   const aluno2 = await prisma.user.upsert({
-    where: { cpf: '456.789.012-34' },
+    where: { cpf: '45678901234' },
     update: {},
     create: {
       cpf: '456.789.012-34',

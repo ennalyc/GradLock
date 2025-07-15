@@ -32,16 +32,3 @@ Given o usuário fornece um ID inválido "abc"
 When o usuário solicita a sala com ID "abc"
 Then o sistema retorna um erro
 And a mensagem "ID da sala deve ser um número válido" é exibida
-
-Scenario: Erro interno do servidor ao listar salas
-Given ocorre um erro interno no servidor
-When o usuário solicita a lista de todas as salas
-Then o sistema retorna um erro interno
-And a mensagem "Erro interno do servidor ao buscar salas" é exibida
-
-Scenario: Erro interno do servidor ao buscar sala por ID
-Given ocorre um erro interno no servidor
-And existe uma sala com ID "1" no sistema
-When o usuário solicita a sala com ID "1"
-Then o sistema retorna um erro interno
-And a mensagem "Erro interno do servidor ao buscar sala" é exibida

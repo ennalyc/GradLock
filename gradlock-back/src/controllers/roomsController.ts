@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import prisma from '../config/prismaClient';
 
 export class RoomsController {
-  static async getAllRooms(req: Request, res: Response): Promise<void> {
+  static async getAllRooms(_req: Request, res: Response): Promise<void> {
     try {
       const rooms = await prisma.room.findMany({
         orderBy: {
-          name: 'asc'
+          name: 'asc',
         },
         select: {
           id: true,
@@ -16,22 +16,22 @@ export class RoomsController {
           hasComputers: true,
           hasProjector: true,
           createdAt: true,
-          updatedAt: true
-        }
+          updatedAt: true,
+        },
       });
 
       res.status(200).json({
         success: true,
         message: 'Salas recuperadas com sucesso',
         data: rooms,
-        count: rooms.length
+        count: rooms.length,
       });
     } catch (error) {
       console.error('Erro ao buscar salas:', error);
       res.status(500).json({
         success: false,
         message: 'Erro interno do servidor ao buscar salas',
-        error: process.env.NODE_ENV === 'development' ? error : undefined
+        error: process.env.NODE_ENV === 'development' ? error : undefined,
       });
     }
   }
@@ -45,7 +45,7 @@ export class RoomsController {
       if (isNaN(roomId)) {
         res.status(400).json({
           success: false,
-          message: 'ID da sala deve ser um número válido'
+          message: 'ID da sala deve ser um número válido',
         });
         return;
       }
@@ -60,22 +60,22 @@ export class RoomsController {
                 select: {
                   id: true,
                   name: true,
-                  userType: true
-                }
-              }
+                  userType: true,
+                },
+              },
             },
             orderBy: {
-              date: 'desc'
-            }
-          }
-        }
+              date: 'desc',
+            },
+          },
+        },
       });
 
       // Verifica se a sala existe
       if (!room) {
         res.status(404).json({
           success: false,
-          message: 'Sala não encontrada'
+          message: 'Sala não encontrada',
         });
         return;
       }
@@ -83,14 +83,14 @@ export class RoomsController {
       res.status(200).json({
         success: true,
         message: 'Sala encontrada com sucesso',
-        data: room
+        data: room,
       });
     } catch (error) {
       console.error('Erro ao buscar sala por ID:', error);
       res.status(500).json({
         success: false,
         message: 'Erro interno do servidor ao buscar sala',
-        error: process.env.NODE_ENV === 'development' ? error : undefined
+        error: process.env.NODE_ENV === 'development' ? error : undefined,
       });
     }
   }
@@ -102,7 +102,7 @@ export class RoomsController {
       if (!name || !description || !capacity) {
         res.status(400).json({
           success: false,
-          message: 'Cadastro não realizado. Todos os campos devem ser preenchidos!'
+          message: 'Cadastro não realizado. Todos os campos devem ser preenchidos!',
         });
         return;
       }
@@ -112,20 +112,20 @@ export class RoomsController {
       if (isNaN(roomCapacity) || roomCapacity <= 0) {
         res.status(400).json({
           success: false,
-          message: 'Capacidade deve ser um número positivo'
+          message: 'Capacidade deve ser um número positivo',
         });
         return;
       }
 
       // Verificar se a sala já existe
       const existingRoom = await prisma.room.findUnique({
-        where: { name: name.trim() }
+        where: { name: name.trim() },
       });
 
       if (existingRoom) {
         res.status(409).json({
           success: false,
-          message: 'Cadastro não realizado. Sala já existente!'
+          message: 'Cadastro não realizado. Sala já existente!',
         });
         return;
       }
@@ -137,21 +137,21 @@ export class RoomsController {
           description: description.trim(),
           capacity: roomCapacity,
           hasComputers: Boolean(hasComputers),
-          hasProjector: Boolean(hasProjector)
-        }
+          hasProjector: Boolean(hasProjector),
+        },
       });
 
       res.status(201).json({
         success: true,
         message: 'Cadastro realizado com sucesso!',
-        data: newRoom
+        data: newRoom,
       });
     } catch (error) {
       console.error('Erro ao criar sala:', error);
       res.status(500).json({
         success: false,
         message: 'Erro interno do servidor ao criar sala',
-        error: process.env.NODE_ENV === 'development' ? error : undefined
+        error: process.env.NODE_ENV === 'development' ? error : undefined,
       });
     }
   }
@@ -166,48 +166,48 @@ export class RoomsController {
       if (isNaN(roomId)) {
         res.status(400).json({
           success: false,
-          message: 'ID da sala deve ser um número válido'
+          message: 'ID da sala deve ser um número válido',
         });
         return;
       }
 
       // Verificar se a sala existe
       const existingRoom = await prisma.room.findUnique({
-        where: { id: roomId }
+        where: { id: roomId },
       });
 
       if (!existingRoom) {
         res.status(404).json({
           success: false,
-          message: 'Sala não encontrada'
+          message: 'Sala não encontrada',
         });
         return;
       }
 
       // Preparar dados para atualização (apenas campos fornecidos)
-      const updateData: any = {};
+      const updateData: { [key: string]: unknown } = {};
 
       if (name !== undefined) {
         if (!name.trim()) {
           res.status(400).json({
             success: false,
-            message: 'Nome da sala não pode ser vazio'
+            message: 'Nome da sala não pode ser vazio',
           });
           return;
         }
 
         // Verificar se o novo nome já existe em outra sala
         const roomWithSameName = await prisma.room.findFirst({
-          where: { 
+          where: {
             name: name.trim(),
-            NOT: { id: roomId }
-          }
+            NOT: { id: roomId },
+          },
         });
 
         if (roomWithSameName) {
           res.status(409).json({
             success: false,
-            message: 'Falha na edição. Esse nome está indisponível'
+            message: 'Falha na edição. Esse nome está indisponível',
           });
           return;
         }
@@ -219,7 +219,7 @@ export class RoomsController {
         if (!description.trim()) {
           res.status(400).json({
             success: false,
-            message: 'Descrição da sala não pode ser vazia'
+            message: 'Descrição da sala não pode ser vazia',
           });
           return;
         }
@@ -231,7 +231,7 @@ export class RoomsController {
         if (isNaN(roomCapacity) || roomCapacity <= 0) {
           res.status(400).json({
             success: false,
-            message: 'Falha na edição. A capacidade deve ser um número positivo!'
+            message: 'Falha na edição. A capacidade deve ser um número positivo!',
           });
           return;
         }
@@ -250,7 +250,7 @@ export class RoomsController {
       if (Object.keys(updateData).length === 0) {
         res.status(400).json({
           success: false,
-          message: 'Nenhum dado fornecido para atualização'
+          message: 'Nenhum dado fornecido para atualização',
         });
         return;
       }
@@ -258,20 +258,20 @@ export class RoomsController {
       // Atualizar a sala
       const updatedRoom = await prisma.room.update({
         where: { id: roomId },
-        data: updateData
-      }); 
+        data: updateData,
+      });
 
       res.status(200).json({
         success: true,
         message: 'Sala atualizada com sucesso',
-        data: updatedRoom
+        data: updatedRoom,
       });
     } catch (error) {
       console.error('Erro ao atualizar sala:', error);
       res.status(500).json({
         success: false,
         message: 'Erro interno do servidor ao atualizar sala',
-        error: process.env.NODE_ENV === 'development' ? error : undefined
+        error: process.env.NODE_ENV === 'development' ? error : undefined,
       });
     }
   }
@@ -285,7 +285,7 @@ export class RoomsController {
       if (isNaN(roomId)) {
         res.status(400).json({
           success: false,
-          message: 'ID da sala deve ser um número válido'
+          message: 'ID da sala deve ser um número válido',
         });
         return;
       }
@@ -294,14 +294,14 @@ export class RoomsController {
       const existingRoom = await prisma.room.findUnique({
         where: { id: roomId },
         include: {
-          reservations: true
-        }
+          reservations: true,
+        },
       });
 
       if (!existingRoom) {
         res.status(404).json({
           success: false,
-          message: 'Sala não encontrada'
+          message: 'Sala não encontrada',
         });
         return;
       }
@@ -311,25 +311,26 @@ export class RoomsController {
         where: {
           roomId: roomId,
           date: {
-            gte: new Date() // Reservas futuras ou de hoje
-          }
-        }
+            gte: new Date(), // Reservas futuras ou de hoje
+          },
+        },
       });
 
       if (activeReservations.length > 0) {
         res.status(409).json({
           success: false,
-          message: 'Não é possível deletar a sala. Existem reservas ativas ou futuras para esta sala',
+          message:
+            'Não é possível deletar a sala. Existem reservas ativas ou futuras para esta sala',
           data: {
-            activeReservations: activeReservations.length
-          }
+            activeReservations: activeReservations.length,
+          },
         });
         return;
       }
 
       // Deletar a sala (as reservas passadas serão deletadas em cascata)
       await prisma.room.delete({
-        where: { id: roomId }
+        where: { id: roomId },
       });
 
       res.status(200).json({
@@ -339,16 +340,16 @@ export class RoomsController {
           deletedRoom: {
             id: existingRoom.id,
             name: existingRoom.name,
-            description: existingRoom.description
-          }
-        }
+            description: existingRoom.description,
+          },
+        },
       });
     } catch (error) {
       console.error('Erro ao deletar sala:', error);
       res.status(500).json({
         success: false,
         message: 'Erro interno do servidor ao deletar sala',
-        error: process.env.NODE_ENV === 'development' ? error : undefined
+        error: process.env.NODE_ENV === 'development' ? error : undefined,
       });
     }
   }
