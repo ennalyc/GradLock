@@ -1,4 +1,4 @@
-feature: Cadastro de usuários
+Feature: Cadastro de usuários
 
 Scenario: Cadastro de aluno com sucesso
 Given o aluno "João Pedro" 
@@ -28,7 +28,7 @@ And ele preenche o campo "Senha" com "310590"
 And clica em "Cadastrar"
 Then o sistema cadastra uma nova conta de usuário como "Docente" com as informações dadas
 And uma mensagem de sucesso "Cadastro realizado com sucesso!" é exibida
-And o usuário "João Silva" com CPF "123.456.789-01" pode realizar login.
+And o usuário "Breno Miranda" com CPF "234.567.890-12" pode realizar login.
 
 Scenario: Cadastro inválido com campo não preenchido
 Given o aluno "João Felipe" 

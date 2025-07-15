@@ -21,7 +21,7 @@ model User {
     name       String
     password   String
     userType   UserType
-    course     String?  // Apenas para discentes
+    course     String? // Apenas para discentes
     enrollment String?  @unique // Apenas para discentes
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
@@ -58,7 +58,7 @@ model Reservation {
     startTime String
     endTime   String
     status    ReservationStatus @default(PENDING)
-    reason    String?           // Motivo da solicitação
+    reason    String? // Motivo da solicitação
     createdAt DateTime          @default(now())
     updatedAt DateTime          @updatedAt
 
@@ -75,13 +75,13 @@ model Reservation {
 enum UserType {
     STUDENT // Discente
     TEACHER // Docente
-    ADMIN   // Administrador
+    ADMIN // Administrador
 
     @@map("user_type")
 }
 
 enum ReservationStatus {
-    PENDING  // Pendente
+    PENDING // Pendente
     APPROVED // Confirmada
     REJECTED // Negada
 

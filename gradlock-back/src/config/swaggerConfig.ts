@@ -9,7 +9,7 @@ const swaggerConfig = {
       version: '1.0.0',
       description: 'Documentação da API',
     },
-    servers: [{ url: serverConfig.base_path }],
+    servers: [{ url: serverConfig.basePath }],
   },
   apis: [path.join(__dirname, '../routes/**/*.ts')],
 };

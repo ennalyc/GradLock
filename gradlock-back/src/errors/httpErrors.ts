@@ -17,6 +17,27 @@ export class ValidationError extends AppError {
   }
 }
 
+export class AlreadyExistsError extends AppError {
+  constructor(message: string) {
+    super(message, 409);
+    this.name = 'AlreadyExistsError';
+  }
+}
+
+export class InvalidCredentialsError extends AppError {
+  constructor(message: string) {
+    super(message, 401);
+    this.name = 'InvalidCredentialsError';
+  }
+}
+
+export class ForbiddenError extends AppError {
+  constructor(message: string) {
+    super(message, 403);
+    this.name = 'ForbiddenError';
+  }
+}
+
 export class NotFoundError extends AppError {
   constructor(message: string) {
     super(message, 404);

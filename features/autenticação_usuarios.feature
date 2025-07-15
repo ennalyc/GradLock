@@ -1,4 +1,4 @@
-feature: Autenticação de usuários
+Feature: Autenticação de usuários
 
 Scenario: Login de usuário bem sucedido
 Given a usuária "Maria Fernanda" 
