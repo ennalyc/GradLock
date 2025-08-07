@@ -1,42 +1,48 @@
 Feature: Efetuar reserva e manutenção de reservas efetuadas
 
-Scenario:  Efetuar nova reserva em uma sala disponível
+Scenario: Efetuar a reserva de uma sala em um horario disponivel
+  Given que estou na página "Reservas"
+  And a sala "E132" está disponível no dia "06/06/2024" no horario das "15h" as "17h"
+  When eu reservo a sala "E132" para o dia "06/06/2024" no horario das "15h" as "17h"
+  Then estou na página "Minhas Reservas"
+  And a sala "E132" está na lista de "salas reservadas"
+  And vejo a mensagem "Sala reservada com sucesso!"
 
-Given que estou na página “Efetuar nova reserva”
-And vejo a sala “E132” “disponível” para reserva
-When eu clico na sala “E132”
-Then posso ver que os dias “03/06/2025” e “05/06/2025” estão disponíveis nesta semana  
-And vejo que a sala “E132” comporta até “35 pessoas”
-When seleciono a data  “03/06/2025”
-And clico em “confirmar”
-Then vejo uma mensagem de sucesso “Sala reservada com sucesso!” na tela  
-And estou na página “Efetuar nova reserva” e o dia “03/06/2025” está “indisponível” para reserva
+Scenario: Efetuar a reserva de uma sala em horario ja reservado
+  Given que estou na página "Reservas"
+  And a sala "E132" não está disponível no dia "06/06/2024" no horario das "15h" as "17h"
+  When eu tento reservar a sala "E132" no dia "06/06/2024" no horario das "15h" as "17h"
+  Then eu vejo a mensagem "Essa sala já possui reserva neste horário!"
+  And eu ainda estou na pagina "Reservas"
 
+Scenario: Edicao da data da reserva de uma sala reservada 
+  Given que estou na pagina "Minhas reservas"
+  And que reservei a sala "E132" no dia "06/06/2024" no horario das "15h" as "17h"
+  And a sala "E132" está disponível no dia "07/06/2024" no horario das "14h" as "16h"
+  When eu edito a reserva da sala "E132" do dia "06/06/2024" para o dia "07/06/2024"
+  And escolho o horario das "14h" as "16h"
+  Then eu vejo a mensagem "A data da sua reserva foi alterada com sucesso!"
+  And eu ainda estou na pagina "Reservas"
+  And a sala "E132" esta reservada no dia "07/06/2024" no horario das "14h" as "16h"
 
-Scenario:  Editar data de uma reserva futura
+Scenario: Edicao do horario da reserva de uma sala reservada
+  Given que estou na pagina "Minhas reservas"
+  And que reservei a sala "E132" no dia "06/06/2024" no horario das "15h" as "17h"
+  And a sala "E132" está disponível no dia "06/06/2024" no horario das "7h" as "9h"
+  When eu edito o horario da reserva da sala "E132" para das "7h" as "9h"
+  Then eu vejo a mensagem "O horário da sua reserva foi alterado com sucesso!"
+  And eu ainda estou na pagina "Reservas"
+  And a sala "E132" esta reservada no dia "06/06/2024" no horario das "7h" as "9h"
 
-Given que estou na página “Minhas reservas”
-And vejo a sala “E132” na lista de reservas “solicitadas”
-And  a sala “E132” está “reservada” para o dia “03/06/2025”
-And  posso ver as opções de “Editar reserva” e “Cancelar reserva”
-When clico em “Editar reserva”
-And clico em “Mudar data”
-Then posso ver a data “06/06/2025” como disponível para solicitar reserva
-When seleciono a data “06/06/2015”
-And a mensagem de confirmação “Você deseja mudar a data de reserva?” aparece na tela  
-And eu clico em “Sim”
-Then uma mensagem de sucesso “Data alterada com sucesso!” aparece na tela
-And estou na página “Minhas reservas” e a sala “E132” está “reservada” para o dia “06/06/2025”
+Scenario: Cancelar reserva de uma sala
+  Given que estou na pagina "Minhas reservas"
+  And que reservei a sala "E132" no dia "06/06/2024" no horario das "15h" as "17h"
+  When eu escolho cancelar minha reserva da sala "E132" no dia "06/06/2024" no horario das "15h" as "17h"
+  Then eu vejo a mensagem "Reserva cancelada com sucesso!"
+  And eu ainda estou na pagina "Reservas"
+  And a sala "E132" esta disponivel no dia "06/06/2024" no horario das "15h" as "17h"
 
-Scenario:  Cancelar uma reserva com antecedência
-
-Given que estou na página “Minhas reservas”
-And vejo a sala “E132” na lista de reservas “solicitadas”
-And a sala “E132” está “reservada” para o dia “06/06/2025”
-And hoje é dia “01/06/2025”
-And posso ver as opções de “Editar reserva” e “Cancelar reserva”
-When clico em “Cancelar reserva”
-Then a mensagem “Você tem certeza que deseja cancelar esta reserva?” aparece na tela
-When eu clico em “Sim”
-Then uma mensagem de sucesso “Reserva cancelada!” aparece na tela
-And estou na página “Minhas reservas” e a sala “E132”  está na lista de reservas “canceladas”
+Scenario: Visualizar sala reservada em Minhas Reservas
+  Given que reservei a sala "E132" no dia "06/06/2024" no horario das "15h" as "17h"
+  When eu entro na pagina "Minhas reservas"
+  Then a sala "E132" está na lista de "salas reservadas"
